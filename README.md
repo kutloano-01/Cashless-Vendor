@@ -1,90 +1,67 @@
-# WayFinder
-Campus WayFinder+
+# 💸 Cashless Vendor+
 
-Smart Campus Navigation Meets Seamless Student Payments
+> Empowering informal vendors to accept digital payments — no bank account, no POS, no mobile app needed.
 
-Campus WayFinder+ is a hackathon project built at the BET Hackathon to help varsity students easily navigate their university campus while enabling integrated, cashless payments for everyday services — all through one intuitive platform.
+## 🧠 About the Project
 
-🚀 Project Overview
+**Cashless Vendor+** is a mobile-first web platform that enables small-scale and informal vendors to accept **cashless payments** via **QR codes** or **payment links**. Built with simplicity and accessibility in mind, the platform eliminates the need for traditional banking infrastructure, expensive POS machines, or complicated fintech apps.
 
-Campus WayFinder+ combines interactive campus navigation with a student-friendly payment system. Students can find lecture halls, libraries, cafeterias, and more — then make payments (simulated in this MVP) for food, printing, or peer transfers seamlessly within the app.
+Developed for the **BET Hackathon 2025**, this project aims to **innovate the future of payments** by making digital transactions accessible to the informal economy.
 
-🎯 Features
+---
 
-Campus Map & Navigation:
-Interactive map with key campus locations and simple route guidance.
+## 🎯 Key Features
 
-Student Wallet:
-Manage balance, view transaction history, and simulate payments.
+### For Vendors:
+- 🔓 Register with just a phone number
+- 📲 Instantly receive a unique QR code and payment link
+- 💵 Accept payments via wallet or mock card
+- 📊 View simple earnings dashboard with transaction history
+- 🔁 Simulate withdrawal to mobile wallet or agent
+- 📞 **USSD Access:** Vendors without smartphones can check their wallet balance and recent transactions by dialing a USSD code
 
-Peer-to-Peer Payments:
-Send and receive funds between students with ease.
+### For Customers:
+- 📷 Scan QR or click payment link
+- 💸 Enter amount and pay via mock wallet
+- ✅ Receive instant payment confirmation
 
-QR Code Payment Simulation:
-Mock payments via QR code scanning to represent contactless transactions.
+---
 
-User Authentication:
-Secure sign-up and login flow using Firebase Authentication.
+## 🔐 Security & Privacy
 
-🛠 Tech Stack
+- All vendor QR codes are uniquely generated and encoded
+- Simulated payments are validated via backend
+- No sensitive data is stored client-side
+- No real payment gateway used — safe for demo and prototyping
+- USSD access requires phone number authentication to protect vendor data
 
-Frontend: React
+---
 
-Backend: Python (FastAPI)
+## 🧱 Tech Stack
 
-Authentication & Database: Firebase (Auth & Firestore)
+| Layer       | Stack                                  |
+|-------------|-----------------------------------------|
+| Frontend    | React.js (Vite or Next.js)             |
+| Backend     | Python (FastAPI)                       |
+| Database    | Firebase Firestore or Supabase         |
+| Auth        | Firebase Authentication (Phone/Email)  |
+| QR Codes    | `qrcode` (Python/JS)                   |
+| USSD        | Africa’s Talking (or similar) API + webhook logic |
+| Hosting     | Vercel (frontend), Render (backend)    |
 
-Maps: Google Maps API / OpenStreetMap
+---
 
-Payment Simulation: Mock transactions (no real money)
+## 🧪 Installation & Setup
 
-Cloud Hosting: Firebase Functions / AWS / GCP (optional)
+```bash
+# Clone the repo
+git clone https://github.com/yourusername/cashless-vendor-plus.git
+cd cashless-vendor-plus
 
-📦 Getting Started
-Prerequisites
-
-Node.js & npm
-
-Python 3.8+
-
-Firebase CLI (if using Firebase)
-
-Google Maps API Key (for map features)
-
-Installation
-
-Clone the repo:
-
-git clone https://github.com/yourusername/campus-wayfinder.git
-cd campus-wayfinder
-
-
-Frontend setup:
-
-cd frontend
+# Install frontend dependencies
+cd client
 npm install
-npm start
 
-
-Backend setup:
-
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+# Install backend dependencies
+cd ../server
 pip install -r requirements.txt
-uvicorn main:app --reload
-
-
-Configure Firebase and Google Maps API keys in .env files
-
-🤝 Contributing
-
-Contributions welcome! Please open an issue or submit a pull request.
-
-📄 License
-
-MIT License
-
-🙏 Acknowledgments
-
-Built at the BET Hackathon — innovating the future of payments for varsity students.
