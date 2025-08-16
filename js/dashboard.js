@@ -351,5 +351,37 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// Global functions for voice commands
+window.showQRCode = showQRCode; // Use existing function
+window.downloadQR = function () {
+  console.log("🎤 downloadQR function called");
+  CashlessVendor.showToast("QR Code download started!", "success");
+};
+
+window.printQR = function () {
+  console.log("🎤 printQR function called");
+  CashlessVendor.showToast("QR Code sent to printer!", "success");
+};
+
+window.checkBalance = function () {
+  console.log("🎤 checkBalance function called");
+  const vendorData = CashlessVendor.Storage.get("currentVendor");
+  const stats = CashlessVendor.Storage.get("vendorStats");
+  if (stats) {
+    CashlessVendor.showToast(
+      `Your balance is R${stats.availableBalance.toFixed(2)}`,
+      "info"
+    );
+  } else {
+    CashlessVendor.showToast("Balance information not available", "error");
+  }
+};
+
+// Test voice command function
+window.testVoiceCommand = function () {
+  console.log("🎤 Voice command test successful!");
+  CashlessVendor.showToast("🎤 Voice command test successful!", "success");
+};
+
 // Export for global use
 window.VendorDashboard = VendorDashboard;

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Microloans - CashlessVendor</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/microloans.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div class="header-content">
+          <div class="header-left">
+            <h1>💰 Microloans</h1>
+            <p>AI-powered credit scoring for street vendors</p>
+          </div>
+          <div class="header-right">
+            <button
+              class="btn-secondary"
+              onclick="CashlessVendor.navigateTo('dashboard.html')"
+            >
+              ← Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-main">
+        <!-- Credit Score Card -->
+        <div class="stats-grid">
+          <div class="stat-card credit-score-card">
+            <div class="stat-header">
+              <h3>Your Credit Score</h3>
+              <span class="credit-badge" id="credit-tier">Calculating...</span>
+            </div>
+            <div class="credit-score-display">
+              <div class="score-circle" id="score-circle">
+                <span class="score-number" id="credit-score">--</span>
+                <span class="score-label">/ 100</span>
+              </div>
+              <div class="score-details">
+                <p class="score-description" id="score-description">
+                  Analyzing your transaction history...
+                </p>
+                <div class="confidence-bar">
+                  <span>Confidence: </span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="confidence-fill"></div>
+                  </div>
+                  <span id="confidence-percent">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card loan-eligibility-card">
+            <div class="stat-header">
+              <h3>Loan Eligibility</h3>
+              <span class="eligibility-status" id="eligibility-status"
+                >Checking...</span
+              >
+            </div>
+            <div class="eligibility-details">
+              <div class="loan-amount">
+                <span class="amount-label">Maximum Loan Amount</span>
+                <span class="amount-value" id="max-loan-amount">R--,---</span>
+              </div>
+              <div class="loan-terms">
+                <div class="term-item">
+                  <span class="term-label">Interest Rate</span>
+                  <span class="term-value" id="interest-rate">--%</span>
+                </div>
+                <div class="term-item">
+                  <span class="term-label">Max Term</span>
+                  <span class="term-value" id="max-term">-- months</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Credit Factors -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Credit Score Breakdown</h3>
+            <p>Factors affecting your creditworthiness</p>
+          </div>
+          <div class="credit-factors" id="credit-factors">
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Transaction Volume</span>
+                <span class="factor-weight">25%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="volume"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Transaction Frequency</span>
+                <span class="factor-weight">20%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="frequency"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Customer Retention</span>
+                <span class="factor-weight">15%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="retention"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Payment Reliability</span>
+                <span class="factor-weight">15%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="reliability"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Business Growth</span>
+                <span class="factor-weight">10%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="growth"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Payment Diversification</span>
+                <span class="factor-weight">10%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="diversification"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+
+            <div class="factor-item">
+              <div class="factor-info">
+                <span class="factor-name">Seasonal Stability</span>
+                <span class="factor-weight">5%</span>
+              </div>
+              <div class="factor-bar">
+                <div class="factor-fill" data-factor="stability"></div>
+              </div>
+              <span class="factor-score">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loan Application -->
+        <div class="card" id="loan-application-card">
+          <div class="card-header">
+            <h3>Apply for Microloan</h3>
+            <p>Get instant funding based on your transaction history</p>
+          </div>
+          <form class="loan-application-form" id="loan-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="loan-amount">Loan Amount (R)</label>
+                <input
+                  type="number"
+                  id="loan-amount"
+                  name="loanAmount"
+                  min="1000"
+                  max="50000"
+                  step="100"
+                  placeholder="Enter amount"
+                  required
+                />
+                <small class="form-help"
+                  >Maximum: <span id="max-amount-help">R--,---</span></small
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="loan-purpose">Purpose</label>
+                <select id="loan-purpose" name="loanPurpose" required>
+                  <option value="">Select purpose</option>
+                  <option value="inventory">Inventory Purchase</option>
+                  <option value="equipment">Equipment Upgrade</option>
+                  <option value="expansion">Business Expansion</option>
+                  <option value="working-capital">Working Capital</option>
+                  <option value="emergency">Emergency Funds</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="loan-preview" id="loan-preview" style="display: none">
+              <h4>Loan Preview</h4>
+              <div class="preview-details">
+                <div class="preview-item">
+                  <span>Loan Amount:</span>
+                  <span id="preview-amount">R0</span>
+                </div>
+                <div class="preview-item">
+                  <span>Interest Rate:</span>
+                  <span id="preview-rate">0%</span>
+                </div>
+                <div class="preview-item">
+                  <span>Term:</span>
+                  <span id="preview-term">0 months</span>
+                </div>
+                <div class="preview-item">
+                  <span>Monthly Payment:</span>
+                  <span id="preview-payment">R0</span>
+                </div>
+                <div class="preview-item total">
+                  <span>Total Repayment:</span>
+                  <span id="preview-total">R0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="calculateLoanPreview()"
+              >
+                Calculate Preview
+              </button>
+              <button type="submit" class="btn-primary" id="apply-btn" disabled>
+                Apply for Loan
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="card">
+          <div class="card-header">
+            <h3>AI Credit Insights</h3>
+            <p>Personalized recommendations to improve your credit score</p>
+          </div>
+          <div class="insights-list" id="credit-insights">
+            <div class="insight-item">
+              <div class="insight-icon">🤖</div>
+              <div class="insight-content">
+                <p>Analyzing your transaction patterns...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Existing Loans -->
+        <div class="card" id="existing-loans-card" style="display: none">
+          <div class="card-header">
+            <h3>Your Active Loans</h3>
+            <p>Track your current loan obligations</p>
+          </div>
+          <div class="loans-list" id="active-loans">
+            <!-- Loans will be populated here -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/ai-credit-scoring.js"></script>
+    <script src="js/ai-fraud-detection.js"></script>
+    <script src="js/blockchain-payments.js"></script>
+    <script src="js/voice-commands.js"></script>
+    <script src="js/microloans.js"></script>
+  </body>
+</html>

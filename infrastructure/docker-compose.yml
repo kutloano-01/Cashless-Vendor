@@ -1,0 +1,218 @@
+# CashlessVendor Production Infrastructure
+version: '3.8'
+
+services:
+  # Frontend Application
+  frontend:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+      - API_BASE_URL=http://api-gateway:3000
+    depends_on:
+      - api-gateway
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # API Gateway & Load Balancer
+  api-gateway:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - payment-service
+      - credit-service
+      - blockchain-service
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # Payment Processing Service
+  payment-service:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.payment
+    environment:
+      - DATABASE_URL=postgresql://cashless:secure_password@postgres:5432/payments
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your-super-secure-jwt-secret
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cashless-network
+    restart: unless-stopped
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # AI Credit Scoring Service
+  credit-service:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.ai
+    environment:
+      - DATABASE_URL=postgresql://cashless:secure_password@postgres:5432/credit
+      - REDIS_URL=redis://redis:6379
+      - ML_MODEL_PATH=/app/models
+    volumes:
+      - ml-models:/app/models
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cashless-network
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  # Blockchain Service
+  blockchain-service:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.blockchain
+    environment:
+      - ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/your-project-id
+      - PRIVATE_KEY_ENCRYPTION_KEY=your-encryption-key
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # Voice Command Service
+  voice-service:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile.voice
+    environment:
+      - SPEECH_API_KEY=your-speech-api-key
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=cashless
+      - POSTGRES_USER=cashless
+      - POSTGRES_PASSWORD=secure_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - cashless-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass secure_redis_password
+    volumes:
+      - redis-data:/data
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # InfluxDB for Time Series Data
+  influxdb:
+    image: influxdb:2.0-alpine
+    environment:
+      - INFLUXDB_DB=metrics
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=secure_influx_password
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secure_grafana_password
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  # ELK Stack for Logging
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.0
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.5.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - cashless-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  influxdb-data:
+  prometheus-data:
+  grafana-data:
+  elasticsearch-data:
+  ml-models:
+
+networks:
+  cashless-network:
+    driver: bridge
