@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawals - CashlessVendor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="logo">CashlessVendor</h2>
+                <div class="vendor-info">
+                    <div class="vendor-avatar">
+                        <span id="vendor-initials">--</span>
+                    </div>
+                    <div class="vendor-details">
+                        <div class="vendor-name" id="vendor-name">Loading...</div>
+                        <div class="vendor-id" id="vendor-id-display">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">
+                        <span class="nav-icon">📈</span>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="withdrawals.html" class="nav-link">
+                        <span class="nav-icon">💰</span>
+                        Withdrawals
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ussd.html" class="nav-link">
+                        <span class="nav-icon">📱</span>
+                        USSD
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="demo.html" class="nav-link">
+                        <span class="nav-icon">🎯</span>
+                        Demo
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="btn btn-outline btn-sm" onclick="logout()">
+                    <span class="nav-icon">🚪</span>
+                    Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1>Withdrawals</h1>
+                    <p class="header-subtitle">Transfer your earnings to your bank account</p>
+                </div>
+            </header>
+
+            <!-- Balance Overview -->
+            <div class="balance-overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Available Balance</h3>
+                            <span class="stat-icon">💰</span>
+                        </div>
+                        <div class="stat-value" id="available-balance">R247.85</div>
+                        <div class="stat-change">Ready to withdraw</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Pending Withdrawals</h3>
+                            <span class="stat-icon">⏳</span>
+                        </div>
+                        <div class="stat-value" id="pending-withdrawals">R0.00</div>
+                        <div class="stat-change">Processing</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Withdrawn</h3>
+                            <span class="stat-icon">📤</span>
+                        </div>
+                        <div class="stat-value" id="total-withdrawn">R0.00</div>
+                        <div class="stat-change">This month</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal Form -->
+            <div class="withdrawal-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Request Withdrawal</h3>
+                        <p class="card-description">Transfer funds to your registered bank account</p>
+                    </div>
+                    
+                    <div class="card-content">
+                        <form id="withdrawal-form" class="withdrawal-form">
+                            <div class="form-group">
+                                <label for="withdrawal-amount">Withdrawal Amount</label>
+                                <div class="amount-input-container">
+                                    <span class="currency-symbol">R</span>
+                                    <input type="number" 
+                                           id="withdrawal-amount" 
+                                           name="amount" 
+                                           placeholder="0.00" 
+                                           step="0.01" 
+                                           min="1" 
+                                           max="247.85" 
+                                           required>
+                                </div>
+                                <div class="amount-limits">
+                                    <span>Min: R1.00</span>
+                                    <span>Max: R247.85</span>
+                                </div>
+                                <div class="error-message" id="amount-error"></div>
+                            </div>
+
+                            <!-- Quick Amount Buttons -->
+                            <div class="quick-amounts">
+                                <button type="button" class="quick-amount-btn" data-amount="50">R50</button>
+                                <button type="button" class="quick-amount-btn" data-amount="100">R100</button>
+                                <button type="button" class="quick-amount-btn" data-amount="200">R200</button>
+                                <button type="button" class="quick-amount-btn" data-amount="247.85">All</button>
+                            </div>
+
+                            <!-- Bank Account Info -->
+                            <div class="bank-info">
+                                <h4>Bank Account Details</h4>
+                                <div class="bank-details">
+                                    <div class="bank-item">
+                                        <span class="label">Bank:</span>
+                                        <span class="value">First National Bank</span>
+                                    </div>
+                                    <div class="bank-item">
+                                        <span class="label">Account:</span>
+                                        <span class="value">****1234</span>
+                                    </div>
+                                    <div class="bank-item">
+                                        <span class="label">Name:</span>
+                                        <span class="value" id="account-holder-name">Loading...</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-sm">Update Bank Details</button>
+                            </div>
+
+                            <!-- Withdrawal Summary -->
+                            <div class="withdrawal-summary">
+                                <div class="summary-row">
+                                    <span>Withdrawal Amount:</span>
+                                    <span id="summary-amount">R0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Processing Fee:</span>
+                                    <span id="summary-fee">R2.50</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>You'll Receive:</span>
+                                    <span id="summary-total">R0.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Terms -->
+                            <div class="withdrawal-terms">
+                                <ul>
+                                    <li>• Withdrawals are processed within 1-2 business days</li>
+                                    <li>• A processing fee of R2.50 applies to all withdrawals</li>
+                                    <li>• Minimum withdrawal amount is R1.00</li>
+                                    <li>• Funds will be transferred to your registered bank account</li>
+                                </ul>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-lg withdrawal-btn" id="withdraw-btn" disabled>
+                                Request Withdrawal
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal History -->
+            <div class="withdrawal-history">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Withdrawal History</h3>
+                        <p class="card-description">Your recent withdrawal requests</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="empty-state">
+                            <div class="empty-icon">💸</div>
+                            <h3>No withdrawals yet</h3>
+                            <p>Your withdrawal history will appear here once you make your first withdrawal request.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Processing Modal -->
+    <div id="processing-modal" class="modal">
+        <div class="modal-content">
+            <div class="processing-animation">
+                <div class="spinner"></div>
+            </div>
+            <h3>Processing Withdrawal</h3>
+            <p>Please wait while we process your withdrawal request...</p>
+            <div class="processing-amount" id="processing-amount">R0.00</div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <div class="success-icon">✅</div>
+            <h3>Withdrawal Requested!</h3>
+            <p>Your withdrawal request has been submitted successfully.</p>
+            <div class="withdrawal-details">
+                <div class="detail-row">
+                    <span>Amount:</span>
+                    <span id="success-amount">R0.00</span>
+                </div>
+                <div class="detail-row">
+                    <span>Processing Fee:</span>
+                    <span>R2.50</span>
+                </div>
+                <div class="detail-row">
+                    <span>You'll Receive:</span>
+                    <span id="success-net">R0.00</span>
+                </div>
+                <div class="detail-row">
+                    <span>Expected Date:</span>
+                    <span id="expected-date">--</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="hideModal('success-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script src="js/withdrawals.js"></script>
+</body>
+</html>

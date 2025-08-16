@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard - CashlessVendor</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="logo">CashlessVendor</h2>
+          <div class="vendor-info">
+            <div class="vendor-avatar">
+              <span id="vendor-initials">--</span>
+            </div>
+            <div class="vendor-details">
+              <div class="vendor-name" id="vendor-name">Loading...</div>
+              <div class="vendor-id" id="vendor-id-display">--</div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item active">
+            <a href="dashboard.html" class="nav-link">
+              <span class="nav-icon">📊</span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="analytics.html" class="nav-link">
+              <span class="nav-icon">📈</span>
+              Analytics
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="withdrawals.html" class="nav-link">
+              <span class="nav-icon">💰</span>
+              Withdrawals
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="ussd.html" class="nav-link">
+              <span class="nav-icon">📱</span>
+              USSD
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="demo.html" class="nav-link">
+              <span class="nav-icon">🎯</span>
+              Demo
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <button class="btn btn-outline btn-sm" onclick="logout()">
+            <span class="nav-icon">🚪</span>
+            Logout
+          </button>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+          <div class="header-left">
+            <h1>Dashboard</h1>
+            <p class="header-subtitle">
+              Welcome back! Here's your business overview.
+            </p>
+          </div>
+          <div class="header-right">
+            <button class="btn btn-primary" onclick="showQRCode()">
+              <span class="btn-icon">📱</span>
+              Show QR Code
+            </button>
+          </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3>Total Earnings</h3>
+              <span class="stat-icon">💰</span>
+            </div>
+            <div class="stat-value" id="total-earnings">R0.00</div>
+            <div class="stat-change positive" id="earnings-change">
+              +R0.00 today
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3>Today's Sales</h3>
+              <span class="stat-icon">📊</span>
+            </div>
+            <div class="stat-value" id="today-sales">0</div>
+            <div class="stat-change" id="sales-change">transactions</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3>Average Sale</h3>
+              <span class="stat-icon">📈</span>
+            </div>
+            <div class="stat-value" id="average-sale">R0.00</div>
+            <div class="stat-change" id="average-change">per transaction</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3>Available Balance</h3>
+              <span class="stat-icon">🏦</span>
+            </div>
+            <div class="stat-value" id="available-balance">R0.00</div>
+            <div class="stat-change" id="balance-change">ready to withdraw</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h2>Quick Actions</h2>
+          <div class="actions-grid">
+            <div class="action-card" onclick="showQRCode()">
+              <div class="action-icon">📱</div>
+              <h3>Display QR Code</h3>
+              <p>Show your payment QR code to customers</p>
+            </div>
+
+            <div class="action-card" onclick="navigateTo('withdrawals.html')">
+              <div class="action-icon">💸</div>
+              <h3>Withdraw Funds</h3>
+              <p>Transfer earnings to your bank account</p>
+            </div>
+
+            <div class="action-card" onclick="navigateTo('analytics.html')">
+              <div class="action-icon">📊</div>
+              <h3>View Analytics</h3>
+              <p>Detailed insights about your sales</p>
+            </div>
+
+            <div class="action-card" onclick="sharePaymentLink()">
+              <div class="action-icon">🔗</div>
+              <h3>Share Payment Link</h3>
+              <p>Send payment link to customers</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions">
+          <div class="section-header">
+            <h2>Recent Transactions</h2>
+            <button
+              class="btn btn-outline btn-sm"
+              onclick="navigateTo('analytics.html')"
+            >
+              View All
+            </button>
+          </div>
+
+          <div class="transactions-list" id="transactions-list">
+            <!-- Transactions will be loaded here -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+      <div class="modal-content qr-modal-content">
+        <div class="modal-header">
+          <h3>Your Payment QR Code</h3>
+          <button class="modal-close" onclick="hideModal('qr-modal')">×</button>
+        </div>
+
+        <div class="qr-display">
+          <div class="qr-code" id="qr-code">
+            <!-- QR code will be generated here -->
+          </div>
+
+          <div class="qr-info">
+            <div class="vendor-details">
+              <h4 id="qr-business-name">Maria's Fresh Fruits</h4>
+              <p id="qr-location">Corner of Main St & 5th Ave</p>
+              <div class="vendor-id-badge" id="qr-vendor-id">CV-ABC12345</div>
+            </div>
+
+            <div class="payment-url">
+              <label>Payment Link:</label>
+              <div class="url-input">
+                <input type="text" id="payment-url" readonly />
+                <button
+                  class="btn btn-sm btn-outline"
+                  onclick="copyPaymentUrl()"
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <div class="ussd-code">
+              <label>USSD Code (for basic phones):</label>
+              <div class="ussd-display" id="ussd-code">*123*ABC12345#</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="downloadQR()">
+            Download QR Code
+          </button>
+          <button class="btn btn-outline" onclick="printQR()">
+            Print QR Code
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/qr-generator.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CashlessVendor - QR Payment System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/components.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1 class="logo">CashlessVendor</h1>
+          <p class="tagline">Empowering street vendors with QR payments</p>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Auth Toggle -->
+        <div class="auth-toggle-container">
+          <div class="auth-toggle">
+            <button class="toggle-btn active" id="register-toggle">
+              New Vendor
+            </button>
+            <button class="toggle-btn" id="login-toggle">
+              Existing Vendor
+            </button>
+          </div>
+        </div>
+
+        <!-- Registration Container -->
+        <div class="registration-container" id="registration-container">
+          <div class="card">
+            <div class="card-header">
+              <h2>Vendor Registration</h2>
+              <p class="step-indicator">
+                Step <span id="current-step">1</span> of 3 - Let's get you set
+                up
+              </p>
+            </div>
+
+            <div class="card-content">
+              <!-- Step Indicators -->
+              <div class="steps">
+                <div class="step active" data-step="1">
+                  <div class="step-circle">1</div>
+                  <span>Business Info</span>
+                </div>
+                <div class="step" data-step="2">
+                  <div class="step-circle">2</div>
+                  <span>Contact & Location</span>
+                </div>
+                <div class="step" data-step="3">
+                  <div class="step-circle">3</div>
+                  <span>Verification</span>
+                </div>
+              </div>
+
+              <!-- Registration Form -->
+              <form id="registration-form" class="form">
+                <!-- Step 1: Business Information -->
+                <div class="form-step active" data-step="1">
+                  <h3>Business Information</h3>
+
+                  <div class="form-group">
+                    <label for="business-name">Business Name *</label>
+                    <input
+                      type="text"
+                      id="business-name"
+                      name="businessName"
+                      placeholder="e.g., Maria's Fresh Fruits"
+                      required
+                    />
+                    <div class="error-message" id="business-name-error"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="owner-name">Owner Name *</label>
+                    <input
+                      type="text"
+                      id="owner-name"
+                      name="ownerName"
+                      placeholder="Your full name"
+                      required
+                    />
+                    <div class="error-message" id="owner-name-error"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="business-type">Business Type *</label>
+                    <select id="business-type" name="businessType" required>
+                      <option value="">Select your business type</option>
+                      <option value="food">Food & Beverages</option>
+                      <option value="retail">Retail & Goods</option>
+                      <option value="services">Services</option>
+                      <option value="crafts">Arts & Crafts</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div class="error-message" id="business-type-error"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="description">Business Description</label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      placeholder="Brief description of your business (optional)"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <!-- Step 2: Contact & Location -->
+                <div class="form-step" data-step="2">
+                  <h3>Contact & Location</h3>
+
+                  <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      placeholder="+27 12 345 6789"
+                      required
+                    />
+                    <div class="error-message" id="phone-error"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="location">Business Location *</label>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      placeholder="e.g., Corner of Main St & 5th Ave"
+                      required
+                    />
+                    <div class="error-message" id="location-error"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="operating-hours">Operating Hours</label>
+                    <input
+                      type="text"
+                      id="operating-hours"
+                      name="operatingHours"
+                      placeholder="e.g., Mon-Fri 8AM-6PM"
+                    />
+                  </div>
+                </div>
+
+                <!-- Step 3: Verification -->
+                <div class="form-step" data-step="3">
+                  <h3>Verification</h3>
+
+                  <div class="verification-info">
+                    <div class="info-card">
+                      <h4>📱 SMS Verification</h4>
+                      <p>We'll send a verification code to your phone number</p>
+                    </div>
+
+                    <div class="info-card">
+                      <h4>🏪 Business Verification</h4>
+                      <p>
+                        Our team will verify your business location within 24
+                        hours
+                      </p>
+                    </div>
+
+                    <div class="info-card">
+                      <h4>💳 Payment Setup</h4>
+                      <p>Set up your bank account for receiving payments</p>
+                    </div>
+                  </div>
+
+                  <div class="terms-section">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="terms" name="terms" required />
+                      <span class="checkmark"></span>
+                      I agree to the
+                      <a href="#" class="link">Terms of Service</a> and
+                      <a href="#" class="link">Privacy Policy</a>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Form Navigation -->
+                <div class="form-navigation">
+                  <button
+                    type="button"
+                    id="prev-btn"
+                    class="btn btn-secondary"
+                    style="display: none"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    id="next-btn"
+                    class="btn btn-primary"
+                    disabled
+                  >
+                    Next
+                  </button>
+                  <button
+                    type="submit"
+                    id="submit-btn"
+                    class="btn btn-primary"
+                    style="display: none"
+                  >
+                    Complete Registration
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Success Modal -->
+      <div id="success-modal" class="modal">
+        <div class="modal-content">
+          <div class="success-icon">✅</div>
+          <h3>Registration Successful!</h3>
+          <p>
+            Welcome to CashlessVendor, <span id="success-name"></span>! Your QR
+            payment system is ready.
+          </p>
+          <div class="vendor-id">
+            <strong>Your Vendor ID: <span id="vendor-id"></span></strong>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-primary" onclick="goToDashboard()">
+              Go to Dashboard
+            </button>
+          </div>
+        </div>
+
+        <!-- Login Container -->
+        <div class="login-container" id="login-container" style="display: none">
+          <div class="card">
+            <div class="card-header">
+              <h2>Vendor Login</h2>
+              <p class="step-indicator">
+                Welcome back! Please sign in to your account
+              </p>
+            </div>
+
+            <div class="card-content">
+              <form id="login-form" class="form">
+                <div class="form-group">
+                  <label for="login-email">Email Address</label>
+                  <input type="email" id="login-email" name="email" required />
+                  <div class="error-message" id="login-email-error"></div>
+                </div>
+
+                <div class="form-group">
+                  <label for="login-password">Password</label>
+                  <input
+                    type="password"
+                    id="login-password"
+                    name="password"
+                    required
+                  />
+                  <div class="error-message" id="login-password-error"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="remember-me" name="rememberMe" />
+                    <span class="checkmark"></span>
+                    Remember me
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg">
+                  Sign In
+                </button>
+
+                <div class="login-links">
+                  <a href="#" class="link" id="forgot-password"
+                    >Forgot your password?</a
+                  >
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script src="js/registration.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>

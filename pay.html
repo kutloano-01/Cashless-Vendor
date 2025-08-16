@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Vendor - CashlessVendor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+    <div class="payment-layout">
+        <!-- Header -->
+        <header class="payment-header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="logo">CashlessVendor</h1>
+                    <p class="payment-subtitle">Secure QR Payment</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="payment-main">
+            <div class="container">
+                <!-- Vendor Info Card -->
+                <div class="vendor-card" id="vendor-info">
+                    <div class="vendor-header">
+                        <div class="vendor-avatar">
+                            <span id="vendor-avatar-text">--</span>
+                        </div>
+                        <div class="vendor-details">
+                            <h2 id="vendor-business-name">Loading...</h2>
+                            <p id="vendor-location">--</p>
+                            <div class="vendor-id-badge" id="vendor-id-badge">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <div class="payment-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Enter Payment Amount</h3>
+                            <p class="card-description">How much would you like to pay?</p>
+                        </div>
+                        
+                        <div class="card-content">
+                            <form id="payment-form" class="payment-form">
+                                <!-- Amount Input -->
+                                <div class="amount-section">
+                                    <div class="form-group">
+                                        <label for="amount">Amount</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">R</span>
+                                            <input type="number" 
+                                                   id="amount" 
+                                                   name="amount" 
+                                                   placeholder="0.00" 
+                                                   step="0.01" 
+                                                   min="0.01" 
+                                                   max="10000" 
+                                                   required>
+                                        </div>
+                                        <div class="error-message" id="amount-error"></div>
+                                    </div>
+
+                                    <!-- Quick Amount Buttons -->
+                                    <div class="quick-amounts">
+                                        <button type="button" class="quick-amount-btn" data-amount="10">R10</button>
+                                        <button type="button" class="quick-amount-btn" data-amount="20">R20</button>
+                                        <button type="button" class="quick-amount-btn" data-amount="50">R50</button>
+                                        <button type="button" class="quick-amount-btn" data-amount="100">R100</button>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Method -->
+                                <div class="payment-method-section">
+                                    <h4>Payment Method</h4>
+                                    <div class="payment-methods">
+                                        <label class="payment-method-option">
+                                            <input type="radio" name="paymentMethod" value="card" checked>
+                                            <div class="method-card">
+                                                <span class="method-icon">💳</span>
+                                                <span class="method-name">Credit/Debit Card</span>
+                                            </div>
+                                        </label>
+                                        
+                                        <label class="payment-method-option">
+                                            <input type="radio" name="paymentMethod" value="mobile">
+                                            <div class="method-card">
+                                                <span class="method-icon">📱</span>
+                                                <span class="method-name">Mobile Money</span>
+                                            </div>
+                                        </label>
+                                        
+                                        <label class="payment-method-option">
+                                            <input type="radio" name="paymentMethod" value="bank">
+                                            <div class="method-card">
+                                                <span class="method-icon">🏦</span>
+                                                <span class="method-name">Bank Transfer</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Summary -->
+                                <div class="payment-summary">
+                                    <div class="summary-row">
+                                        <span>Amount:</span>
+                                        <span id="summary-amount">R0.00</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Processing Fee:</span>
+                                        <span id="summary-fee">R0.00</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Total:</span>
+                                        <span id="summary-total">R0.00</span>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary btn-lg payment-btn" id="pay-btn">
+                                    Pay Now
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Processing Modal -->
+        <div id="processing-modal" class="modal">
+            <div class="modal-content">
+                <div class="processing-animation">
+                    <div class="spinner"></div>
+                </div>
+                <h3>Processing Payment</h3>
+                <p>Please wait while we process your payment...</p>
+                <div class="processing-amount" id="processing-amount">R0.00</div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <div class="success-icon">✅</div>
+                <h3>Payment Successful!</h3>
+                <p>Your payment has been processed successfully.</p>
+                <div class="payment-details">
+                    <div class="detail-row">
+                        <span>Amount Paid:</span>
+                        <span id="success-amount">R0.00</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>To:</span>
+                        <span id="success-vendor">--</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Transaction ID:</span>
+                        <span id="success-transaction-id">--</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="window.close()">Close</button>
+                    <button class="btn btn-outline" onclick="printReceipt()">Print Receipt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal">
+            <div class="modal-content">
+                <div class="error-icon">❌</div>
+                <h3>Payment Failed</h3>
+                <p id="error-message">Something went wrong with your payment. Please try again.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="hideModal('error-modal')">Try Again</button>
+                    <button class="btn btn-outline" onclick="window.close()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script src="js/payment.js"></script>
+</body>
+</html>

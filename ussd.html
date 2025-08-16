@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USSD - CashlessVendor</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="logo">CashlessVendor</h2>
+          <div class="vendor-info">
+            <div class="vendor-avatar">
+              <span id="vendor-initials">--</span>
+            </div>
+            <div class="vendor-details">
+              <div class="vendor-name" id="vendor-name">Loading...</div>
+              <div class="vendor-id" id="vendor-id-display">--</div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <span class="nav-icon">📊</span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="analytics.html" class="nav-link">
+              <span class="nav-icon">📈</span>
+              Analytics
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="withdrawals.html" class="nav-link">
+              <span class="nav-icon">💰</span>
+              Withdrawals
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a href="ussd.html" class="nav-link">
+              <span class="nav-icon">📱</span>
+              USSD
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="demo.html" class="nav-link">
+              <span class="nav-icon">🎯</span>
+              Demo
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <button class="btn btn-outline btn-sm" onclick="logout()">
+            <span class="nav-icon">🚪</span>
+            Logout
+          </button>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+          <div class="header-left">
+            <h1>USSD Payments</h1>
+            <p class="header-subtitle">
+              Accept payments from basic phones using USSD codes
+            </p>
+          </div>
+        </header>
+
+        <!-- USSD Overview -->
+        <div class="ussd-overview">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Your USSD Code</h3>
+                <span class="stat-icon">📱</span>
+              </div>
+              <div class="stat-value ussd-code" id="ussd-code">
+                *123*ABC12345#
+              </div>
+              <div class="stat-change">Share with customers</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>USSD Payments Today</h3>
+                <span class="stat-icon">📊</span>
+              </div>
+              <div class="stat-value" id="ussd-payments">5</div>
+              <div class="stat-change">transactions</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>USSD Revenue</h3>
+                <span class="stat-icon">💰</span>
+              </div>
+              <div class="stat-value" id="ussd-revenue">R125.50</div>
+              <div class="stat-change">from USSD payments</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- How USSD Works -->
+        <div class="ussd-instructions">
+          <div class="card">
+            <div class="card-header">
+              <h3>How USSD Payments Work</h3>
+              <p class="card-description">
+                Simple payments for customers with basic phones
+              </p>
+            </div>
+
+            <div class="card-content">
+              <div class="instruction-steps">
+                <div class="step-item">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h4>Customer Dials Code</h4>
+                    <p>
+                      Customer dials your USSD code:
+                      <strong id="display-ussd-code">*123*ABC12345#</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h4>Enter Amount</h4>
+                    <p>Customer enters the payment amount when prompted</p>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h4>Confirm Payment</h4>
+                    <p>
+                      Customer confirms the payment using their mobile money PIN
+                    </p>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-number">4</div>
+                  <div class="step-content">
+                    <h4>Payment Complete</h4>
+                    <p>Both you and the customer receive SMS confirmation</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USSD Code Display -->
+        <div class="ussd-display-section">
+          <div class="card">
+            <div class="card-header">
+              <h3>Share Your USSD Code</h3>
+              <p class="card-description">
+                Display this code for customers to make payments
+              </p>
+            </div>
+
+            <div class="card-content">
+              <div class="ussd-code-display">
+                <div class="code-container">
+                  <div class="code-label">Dial this code to pay:</div>
+                  <div class="code-value" id="main-ussd-code">
+                    *123*ABC12345#
+                  </div>
+                  <div class="business-name" id="ussd-business-name">
+                    Maria's Fresh Fruits
+                  </div>
+                </div>
+
+                <div class="code-actions">
+                  <button class="btn btn-primary" onclick="copyUSSDCode()">
+                    Copy Code
+                  </button>
+                  <button class="btn btn-outline" onclick="printUSSDCode()">
+                    Print Sign
+                  </button>
+                  <button class="btn btn-outline" onclick="shareUSSDCode()">
+                    Share Code
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent USSD Transactions -->
+        <div class="ussd-transactions">
+          <div class="card">
+            <div class="card-header">
+              <h3>Recent USSD Transactions</h3>
+              <p class="card-description">Payments received via USSD</p>
+            </div>
+
+            <div class="card-content">
+              <div class="transactions-list" id="ussd-transactions-list">
+                <div class="transaction-item">
+                  <div class="transaction-info">
+                    <div class="transaction-customer">+27 82 123 4567</div>
+                    <div class="transaction-time">2 hours ago</div>
+                  </div>
+                  <div class="transaction-amount">
+                    <span class="amount">R25.00</span>
+                    <span class="status status-completed">completed</span>
+                  </div>
+                </div>
+
+                <div class="transaction-item">
+                  <div class="transaction-info">
+                    <div class="transaction-customer">+27 71 987 6543</div>
+                    <div class="transaction-time">4 hours ago</div>
+                  </div>
+                  <div class="transaction-amount">
+                    <span class="amount">R15.50</span>
+                    <span class="status status-completed">completed</span>
+                  </div>
+                </div>
+
+                <div class="transaction-item">
+                  <div class="transaction-info">
+                    <div class="transaction-customer">+27 83 456 7890</div>
+                    <div class="transaction-time">6 hours ago</div>
+                  </div>
+                  <div class="transaction-amount">
+                    <span class="amount">R42.00</span>
+                    <span class="status status-completed">completed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USSD Demo -->
+        <div class="ussd-demo">
+          <div class="card">
+            <div class="card-header">
+              <h3>Try USSD Demo</h3>
+              <p class="card-description">
+                Experience what your customers see when using USSD
+              </p>
+            </div>
+
+            <div class="card-content">
+              <div class="demo-container">
+                <div class="phone-simulator">
+                  <div class="phone-screen">
+                    <div class="phone-header">
+                      <div class="signal-bars">
+                        <span></span><span></span><span></span><span></span>
+                      </div>
+                      <div class="carrier">MTN</div>
+                      <div class="battery">🔋</div>
+                    </div>
+
+                    <div class="ussd-screen" id="ussd-screen">
+                      <div class="ussd-step active" id="step-1">
+                        <div class="screen-title">Dial USSD Code</div>
+                        <div class="dial-display">*123*ABC12345#</div>
+                        <div class="instruction">Press call button to dial</div>
+                      </div>
+
+                      <div class="ussd-step" id="step-2">
+                        <div class="screen-title">CashlessVendor</div>
+                        <div class="vendor-info">
+                          <div>
+                            Pay:
+                            <span id="demo-vendor-name"
+                              >Maria's Fresh Fruits</span
+                            >
+                          </div>
+                          <div>
+                            ID: <span id="demo-vendor-id">CV-ABC12345</span>
+                          </div>
+                        </div>
+                        <div class="ussd-menu">
+                          <div>1. Make Payment</div>
+                          <div>2. Check Balance</div>
+                          <div>0. Cancel</div>
+                        </div>
+                        <div class="input-prompt">Enter choice:</div>
+                      </div>
+
+                      <div class="ussd-step" id="step-3">
+                        <div class="screen-title">Enter Amount</div>
+                        <div class="amount-display">
+                          <div>
+                            Pay to:
+                            <span id="demo-vendor-name-2"
+                              >Maria's Fresh Fruits</span
+                            >
+                          </div>
+                          <div class="amount-input">
+                            R <span id="demo-amount">25.50</span>
+                          </div>
+                        </div>
+                        <div class="input-prompt">Enter amount in Rands:</div>
+                      </div>
+
+                      <div class="ussd-step" id="step-4">
+                        <div class="screen-title">Confirm Payment</div>
+                        <div class="confirmation-details">
+                          <div>
+                            To:
+                            <span id="demo-vendor-name-3"
+                              >Maria's Fresh Fruits</span
+                            >
+                          </div>
+                          <div>
+                            Amount: R<span id="demo-amount-2">25.50</span>
+                          </div>
+                          <div>Fee: R0.50</div>
+                          <div class="total">
+                            Total: R<span id="demo-total">26.00</span>
+                          </div>
+                        </div>
+                        <div class="ussd-menu">
+                          <div>1. Confirm</div>
+                          <div>2. Cancel</div>
+                        </div>
+                        <div class="input-prompt">Enter PIN to confirm:</div>
+                      </div>
+
+                      <div class="ussd-step" id="step-5">
+                        <div class="screen-title">Processing...</div>
+                        <div class="processing-animation">
+                          <div class="spinner"></div>
+                          <div>Please wait...</div>
+                        </div>
+                      </div>
+
+                      <div class="ussd-step" id="step-6">
+                        <div class="screen-title">Payment Successful!</div>
+                        <div class="success-details">
+                          <div>✅ Payment Complete</div>
+                          <div>
+                            Amount: R<span id="demo-amount-3">25.50</span>
+                          </div>
+                          <div>
+                            To:
+                            <span id="demo-vendor-name-4"
+                              >Maria's Fresh Fruits</span
+                            >
+                          </div>
+                          <div>Ref: TXN-USSD123</div>
+                          <div class="sms-note">SMS receipt sent</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="phone-keypad">
+                      <div class="keypad-row">
+                        <button class="key">1</button>
+                        <button class="key">2</button>
+                        <button class="key">3</button>
+                      </div>
+                      <div class="keypad-row">
+                        <button class="key">4</button>
+                        <button class="key">5</button>
+                        <button class="key">6</button>
+                      </div>
+                      <div class="keypad-row">
+                        <button class="key">7</button>
+                        <button class="key">8</button>
+                        <button class="key">9</button>
+                      </div>
+                      <div class="keypad-row">
+                        <button class="key">*</button>
+                        <button class="key">0</button>
+                        <button class="key">#</button>
+                      </div>
+                      <div class="keypad-row">
+                        <button class="key call-btn">📞</button>
+                        <button class="key end-btn">📴</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="demo-controls">
+                  <div class="demo-steps-nav">
+                    <button class="step-btn active" data-step="1">
+                      1. Dial Code
+                    </button>
+                    <button class="step-btn" data-step="2">
+                      2. Select Payment
+                    </button>
+                    <button class="step-btn" data-step="3">
+                      3. Enter Amount
+                    </button>
+                    <button class="step-btn" data-step="4">4. Confirm</button>
+                    <button class="step-btn" data-step="5">
+                      5. Processing
+                    </button>
+                    <button class="step-btn" data-step="6">6. Success</button>
+                  </div>
+
+                  <div class="demo-actions">
+                    <button class="btn btn-primary" id="start-ussd-demo">
+                      Start Demo
+                    </button>
+                    <button class="btn btn-outline" id="reset-ussd-demo">
+                      Reset
+                    </button>
+                    <button class="btn btn-outline" id="auto-play-demo">
+                      Auto Play
+                    </button>
+                  </div>
+
+                  <div class="demo-explanation" id="demo-explanation">
+                    <h4>Step 1: Dial USSD Code</h4>
+                    <p>
+                      Customer dials your unique USSD code on any phone - no
+                      internet needed!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USSD Benefits -->
+        <div class="ussd-benefits">
+          <div class="card">
+            <div class="card-header">
+              <h3>Why Use USSD Payments?</h3>
+              <p class="card-description">
+                Benefits for you and your customers
+              </p>
+            </div>
+
+            <div class="card-content">
+              <div class="benefits-grid">
+                <div class="benefit-item">
+                  <div class="benefit-icon">📱</div>
+                  <h4>Works on Any Phone</h4>
+                  <p>Customers don't need smartphones or internet connection</p>
+                </div>
+
+                <div class="benefit-item">
+                  <div class="benefit-icon">⚡</div>
+                  <h4>Instant Payments</h4>
+                  <p>
+                    Payments are processed immediately with SMS confirmation
+                  </p>
+                </div>
+
+                <div class="benefit-item">
+                  <div class="benefit-icon">🔒</div>
+                  <h4>Secure & Safe</h4>
+                  <p>Bank-grade security with PIN verification</p>
+                </div>
+
+                <div class="benefit-item">
+                  <div class="benefit-icon">💰</div>
+                  <h4>Low Fees</h4>
+                  <p>Competitive transaction fees for USSD payments</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/ussd.js"></script>
+  </body>
+</html>
