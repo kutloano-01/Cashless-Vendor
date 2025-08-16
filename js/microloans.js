@@ -30,20 +30,32 @@ class MicroloansManager {
     async loadCreditAssessment() {
         try {
             CashlessVendor.showToast('🤖 AI analyzing your transaction history...', 'info');
-            
+
             // Calculate credit score
             this.currentAssessment = await this.creditScoring.calculateCreditScore(this.vendorId);
-            
+
+            // Record monitoring metrics
+            if (window.systemMonitoring) {
+                window.systemMonitoring.recordCreditAssessment(
+                    this.vendorId,
+                    this.currentAssessment.score,
+                    this.currentAssessment.loanTerms.maxLoan > 0
+                );
+            }
+
             // Display results
             this.displayCreditScore();
             this.displayCreditFactors();
             this.displayLoanEligibility();
             this.displayCreditInsights();
-            
+
             CashlessVendor.showToast('✅ Credit assessment complete!', 'success');
-            
+
         } catch (error) {
             console.error('Error loading credit assessment:', error);
+            if (window.systemMonitoring) {
+                window.systemMonitoring.recordError('Credit Assessment', error.message, this.vendorId);
+            }
             CashlessVendor.showToast('❌ Error analyzing credit profile', 'error');
         }
     }

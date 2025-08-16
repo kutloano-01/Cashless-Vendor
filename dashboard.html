@@ -123,6 +123,17 @@
             <div class="stat-value" id="available-balance">R0.00</div>
             <div class="stat-change" id="balance-change">ready to withdraw</div>
           </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3>System Health</h3>
+              <span class="stat-icon" id="health-icon">🟢</span>
+            </div>
+            <div class="stat-value" id="system-uptime">99.97%</div>
+            <div class="stat-change" id="health-status">
+              All systems operational
+            </div>
+          </div>
         </div>
 
         <!-- Quick Actions -->
@@ -151,6 +162,15 @@
               <div class="action-icon">🏦</div>
               <h3>Get Microloan</h3>
               <p>AI-powered credit scoring for instant loans</p>
+            </div>
+
+            <div
+              class="action-card"
+              onclick="navigateTo('monitoring-dashboard.html')"
+            >
+              <div class="action-icon">📊</div>
+              <h3>System Health</h3>
+              <p>Production monitoring and performance metrics</p>
             </div>
 
             <div class="action-card" onclick="sharePaymentLink()">
@@ -233,6 +253,7 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
+    <script src="js/system-monitoring.js"></script>
     <script src="js/ai-fraud-detection.js"></script>
     <script src="js/blockchain-payments.js"></script>
     <script src="js/voice-commands.js"></script>
