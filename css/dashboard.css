@@ -1154,3 +1154,72 @@
     text-align: center;
   }
 }
+
+/* SMS Image Styles */
+.sms-image-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.sms-image {
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.sms-image:hover {
+  transform: scale(1.05);
+}
+
+.sms-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+.benefit-sms-image {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.benefit-sms {
+  max-width: 80px;
+  height: auto;
+  border-radius: 6px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.benefit-sms:hover {
+  opacity: 1;
+}
+
+.sms-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+/* Mobile responsive for SMS images */
+@media (max-width: 768px) {
+  .sms-image {
+    max-width: 80px;
+  }
+
+  .benefit-sms {
+    max-width: 60px;
+  }
+
+  .sms-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

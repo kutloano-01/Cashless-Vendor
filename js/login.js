@@ -104,7 +104,9 @@ class VendorLogin {
                     return false;
                 }
                 
-                if (!CashlessVendor.isValidEmail(email)) {
+                // Simple email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
                     emailError.textContent = 'Please enter a valid email address';
                     return false;
                 }
@@ -379,6 +381,116 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Demo login function
+function loginDemo(type) {
+    const demoAccounts = {
+        maria: {
+            id: 'CV-MARIA123',
+            vendorId: 'CV-MARIA123',
+            phone: '+27 12 345 6789',
+            ownerName: 'Maria Santos',
+            businessName: 'Maria\'s Fresh Fruits',
+            location: 'Corner of Main St & 5th Ave',
+            email: 'maria@freshfruits.co.za',
+            businessType: 'food',
+            description: 'Fresh fruits and vegetables from local farms'
+        },
+        john: {
+            id: 'CV-JOHN456',
+            vendorId: 'CV-JOHN456',
+            phone: '+27 11 987 6543',
+            ownerName: 'John Mthembu',
+            businessName: 'John\'s Street Food',
+            location: 'Taxi Rank, Johannesburg',
+            email: 'john@streetfood.co.za',
+            businessType: 'food',
+            description: 'Authentic South African street food'
+        },
+        sarah: {
+            id: 'CV-SARAH789',
+            vendorId: 'CV-SARAH789',
+            phone: '+27 21 555 0123',
+            ownerName: 'Sarah Ndlovu',
+            businessName: 'Sarah\'s Crafts',
+            location: 'V&A Waterfront, Cape Town',
+            email: 'sarah@crafts.co.za',
+            businessType: 'crafts',
+            description: 'Handmade crafts and traditional art'
+        }
+    };
+
+    const vendor = demoAccounts[type];
+    if (vendor) {
+        vendor.loginTime = new Date().toISOString();
+        vendor.password = 'password123';
+
+        // Store vendor data
+        CashlessVendor.Storage.set('currentVendor', vendor);
+        CashlessVendor.Storage.set('vendorRegistered', true);
+
+        // Store in registered vendors list
+        let registeredVendors = CashlessVendor.Storage.get('registeredVendors') || [];
+        const existingIndex = registeredVendors.findIndex(v => v.vendorId === vendor.vendorId);
+
+        if (existingIndex >= 0) {
+            registeredVendors[existingIndex] = vendor;
+        } else {
+            registeredVendors.push(vendor);
+        }
+
+        CashlessVendor.Storage.set('registeredVendors', registeredVendors);
+
+        // Store session
+        const sessionData = {
+            vendorId: vendor.vendorId,
+            email: vendor.email,
+            loginTime: new Date().toISOString(),
+            rememberMe: true
+        };
+        localStorage.setItem('vendorSession', JSON.stringify(sessionData));
+
+        CashlessVendor.showToast(`Welcome back, ${vendor.ownerName}!`, 'success');
+
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1000);
+    }
+}
+
+// Logout function
+function logout() {
+    const currentVendor = CashlessVendor.Storage.get('currentVendor');
+
+    if (currentVendor) {
+        // Update last logout time
+        currentVendor.lastLogoutTime = new Date().toISOString();
+
+        // Update the vendor in registered vendors list
+        let registeredVendors = CashlessVendor.Storage.get('registeredVendors') || [];
+        const vendorIndex = registeredVendors.findIndex(v => v.vendorId === currentVendor.vendorId);
+
+        if (vendorIndex >= 0) {
+            registeredVendors[vendorIndex] = currentVendor;
+            CashlessVendor.Storage.set('registeredVendors', registeredVendors);
+        }
+    }
+
+    // Clear current session
+    CashlessVendor.Storage.remove('currentVendor');
+    CashlessVendor.Storage.remove('vendorRegistered');
+    localStorage.removeItem('vendorSession');
+    sessionStorage.removeItem('vendorSession');
+
+    // Show logout message
+    CashlessVendor.showToast('You have been logged out. Your account data is saved for next time!', 'success');
+
+    // Redirect to home page
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1500);
+}
+
 // Export for global use
 window.VendorLogin = VendorLogin;
 window.logout = logout;
+window.loginDemo = loginDemo;

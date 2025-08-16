@@ -301,6 +301,97 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Hero action functions
+function showDemo() {
+    // Check if user is logged in
+    const currentVendor = Storage.get('currentVendor');
+
+    if (currentVendor) {
+        // Redirect to demo page if logged in
+        window.location.href = 'demo.html';
+    } else {
+        // Show demo page
+        window.location.href = 'demo.html';
+    }
+}
+
+function scrollToAuth() {
+    const authSection = document.querySelector('.auth-toggle-container');
+    if (authSection) {
+        authSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+}
+
+// Auto-login check on page load
+function checkAutoLogin() {
+    // Only run auto-login on index page
+    if (!window.location.pathname.endsWith('index.html') && window.location.pathname !== '/') {
+        return false;
+    }
+
+    // Check for existing session
+    let sessionData = localStorage.getItem('vendorSession');
+    if (!sessionData) {
+        sessionData = sessionStorage.getItem('vendorSession');
+    }
+
+    if (sessionData) {
+        try {
+            const session = JSON.parse(sessionData);
+            const registeredVendors = Storage.get('registeredVendors') || [];
+            const vendor = registeredVendors.find(v => v.vendorId === session.vendorId || v.email === session.email);
+
+            if (vendor) {
+                // Update vendor with latest session info
+                vendor.lastLoginTime = new Date().toISOString();
+
+                // Auto-login and redirect
+                Storage.set('currentVendor', vendor);
+                Storage.set('vendorRegistered', true);
+
+                // Update the vendor in registered vendors list
+                const vendorIndex = registeredVendors.findIndex(v => v.vendorId === vendor.vendorId);
+                if (vendorIndex >= 0) {
+                    registeredVendors[vendorIndex] = vendor;
+                    Storage.set('registeredVendors', registeredVendors);
+                }
+
+                // Show welcome message
+                showToast(`Welcome back, ${vendor.ownerName}!`, 'success');
+
+                // Redirect to dashboard after a short delay
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+                return true;
+            } else {
+                // Session exists but vendor not found, clear invalid session
+                localStorage.removeItem('vendorSession');
+                sessionStorage.removeItem('vendorSession');
+            }
+        } catch (error) {
+            console.error('Session check error:', error);
+            // Clear invalid session
+            localStorage.removeItem('vendorSession');
+            sessionStorage.removeItem('vendorSession');
+        }
+    }
+
+    return false;
+}
+
+// Check for auto-login when on index page
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Small delay to allow page to load
+        setTimeout(checkAutoLogin, 500);
+    });
+}
+
 // Export utilities for use in other files
 window.CashlessVendor = {
     formatCurrency,
@@ -322,5 +413,10 @@ window.CashlessVendor = {
     hideModal,
     showToast,
     showLoading,
-    debounce
+    debounce,
+    checkAutoLogin
 };
+
+// Global functions for HTML onclick handlers
+window.showDemo = showDemo;
+window.scrollToAuth = scrollToAuth;

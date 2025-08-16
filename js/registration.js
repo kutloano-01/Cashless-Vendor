@@ -219,7 +219,36 @@ class VendorRegistration {
             
             CashlessVendor.Storage.set('currentVendor', vendorData);
             CashlessVendor.Storage.set('vendorRegistered', true);
-            
+
+            // Store vendor in registered vendors list for future logins
+            let registeredVendors = CashlessVendor.Storage.get('registeredVendors') || [];
+
+            // Add authentication details for demo (in real app, password would be hashed)
+            vendorData.password = 'password123';
+            vendorData.email = `${vendorData.ownerName.toLowerCase().replace(/\s+/g, '.')}@${vendorData.businessName.toLowerCase().replace(/\s+/g, '')}.co.za`;
+
+            // Check if vendor already exists
+            const existingIndex = registeredVendors.findIndex(v => v.vendorId === vendorData.vendorId);
+
+            if (existingIndex >= 0) {
+                // Update existing vendor
+                registeredVendors[existingIndex] = vendorData;
+            } else {
+                // Add new vendor
+                registeredVendors.push(vendorData);
+            }
+
+            CashlessVendor.Storage.set('registeredVendors', registeredVendors);
+
+            // Create persistent session
+            const sessionData = {
+                vendorId: vendorData.vendorId,
+                email: vendorData.email,
+                loginTime: new Date().toISOString(),
+                rememberMe: true
+            };
+            localStorage.setItem('vendorSession', JSON.stringify(sessionData));
+
             // Show success modal
             this.showSuccessModal(vendorData);
             

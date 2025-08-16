@@ -11,6 +11,67 @@
   </head>
   <body>
     <div class="dashboard-layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="logo">CashlessVendor</h2>
+          <div class="vendor-info">
+            <div class="vendor-avatar">
+              <span id="vendor-initials">--</span>
+            </div>
+            <div class="vendor-details">
+              <div class="vendor-name" id="vendor-name">Loading...</div>
+              <div class="vendor-id" id="vendor-id-display">--</div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <span class="nav-icon">📊</span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="analytics.html" class="nav-link">
+              <span class="nav-icon">📈</span>
+              Analytics
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="withdrawals.html" class="nav-link">
+              <span class="nav-icon">💰</span>
+              Withdrawals
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a href="microloans.html" class="nav-link">
+              <span class="nav-icon">🏦</span>
+              Microloans
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="ussd.html" class="nav-link">
+              <span class="nav-icon">📱</span>
+              USSD
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="demo.html" class="nav-link">
+              <span class="nav-icon">🎯</span>
+              Demo
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <button class="btn-secondary btn-sm" onclick="window.location.href='index.html'">
+            🚪 Logout
+          </button>
+        </div>
+      </nav>
+
       <!-- Header -->
       <header class="dashboard-header">
         <div class="header-content">
@@ -21,7 +82,7 @@
           <div class="header-right">
             <button
               class="btn-secondary"
-              onclick="CashlessVendor.navigateTo('dashboard.html')"
+              onclick="window.location.href='dashboard.html'"
             >
               ← Back to Dashboard
             </button>
@@ -31,141 +92,209 @@
 
       <!-- Main Content -->
       <main class="dashboard-main">
-        <!-- Credit Score Card -->
-        <div class="stats-grid">
-          <div class="stat-card credit-score-card">
-            <div class="stat-header">
-              <h3>Your Credit Score</h3>
+        <!-- Credit Overview Section -->
+        <div class="credit-overview-section">
+          <div class="credit-score-card-large">
+            <div class="score-header">
+              <h2>Your Credit Score</h2>
               <span class="credit-badge" id="credit-tier">Calculating...</span>
             </div>
-            <div class="credit-score-display">
-              <div class="score-circle" id="score-circle">
-                <span class="score-number" id="credit-score">--</span>
-                <span class="score-label">/ 100</span>
+            <div class="score-main-display">
+              <div class="score-circle-large" id="score-circle">
+                <span class="score-number-large" id="credit-score">--</span>
+                <span class="score-label-large">/ 100</span>
               </div>
-              <div class="score-details">
-                <p class="score-description" id="score-description">
+              <div class="score-info">
+                <p class="score-description-large" id="score-description">
                   Analyzing your transaction history...
                 </p>
-                <div class="confidence-bar">
-                  <span>Confidence: </span>
-                  <div class="progress-bar">
-                    <div class="progress-fill" id="confidence-fill"></div>
+                <div class="confidence-display">
+                  <div class="confidence-label">AI Confidence Level</div>
+                  <div class="confidence-bar-large">
+                    <div class="progress-fill-large" id="confidence-fill"></div>
                   </div>
-                  <span id="confidence-percent">--</span>
+                  <div class="confidence-text">
+                    <span id="confidence-percent">--</span> confidence
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="stat-card loan-eligibility-card">
-            <div class="stat-header">
-              <h3>Loan Eligibility</h3>
-              <span class="eligibility-status" id="eligibility-status"
-                >Checking...</span
-              >
+          <div class="loan-eligibility-card-large">
+            <div class="eligibility-header">
+              <h2>Loan Eligibility</h2>
+              <span class="eligibility-status" id="eligibility-status">Checking...</span>
             </div>
-            <div class="eligibility-details">
-              <div class="loan-amount">
-                <span class="amount-label">Maximum Loan Amount</span>
-                <span class="amount-value" id="max-loan-amount">R--,---</span>
+            <div class="eligibility-content">
+              <div class="max-loan-display">
+                <div class="amount-label-large">Maximum Loan Amount</div>
+                <div class="amount-value-large" id="max-loan-amount">R--,---</div>
               </div>
-              <div class="loan-terms">
-                <div class="term-item">
-                  <span class="term-label">Interest Rate</span>
-                  <span class="term-value" id="interest-rate">--%</span>
+              <div class="loan-terms-grid">
+                <div class="term-card">
+                  <div class="term-icon">📊</div>
+                  <div class="term-details">
+                    <div class="term-label-large">Interest Rate</div>
+                    <div class="term-value-large" id="interest-rate">--%</div>
+                  </div>
                 </div>
-                <div class="term-item">
-                  <span class="term-label">Max Term</span>
-                  <span class="term-value" id="max-term">-- months</span>
+                <div class="term-card">
+                  <div class="term-icon">📅</div>
+                  <div class="term-details">
+                    <div class="term-label-large">Maximum Term</div>
+                    <div class="term-value-large" id="max-term">-- months</div>
+                  </div>
+                </div>
+                <div class="term-card">
+                  <div class="term-icon">💰</div>
+                  <div class="term-details">
+                    <div class="term-label-large">Monthly Payment</div>
+                    <div class="term-value-large" id="estimated-payment">R--</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Credit Factors -->
-        <div class="card">
-          <div class="card-header">
-            <h3>Credit Score Breakdown</h3>
-            <p>Factors affecting your creditworthiness</p>
+        <!-- Credit Factors Section -->
+        <div class="credit-factors-section">
+          <div class="section-header">
+            <h2>📊 Credit Score Breakdown</h2>
+            <p>Detailed analysis of factors affecting your creditworthiness</p>
           </div>
-          <div class="credit-factors" id="credit-factors">
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Transaction Volume</span>
-                <span class="factor-weight">25%</span>
+          <div class="factors-grid" id="credit-factors">
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">📈</div>
+                <div class="factor-info">
+                  <div class="factor-name">Transaction Volume</div>
+                  <div class="factor-weight">25% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="volume">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="volume"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="volume"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
+              <div class="factor-description">
+                Consistent sales volume shows business stability
+              </div>
             </div>
 
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Transaction Frequency</span>
-                <span class="factor-weight">20%</span>
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">🔄</div>
+                <div class="factor-info">
+                  <div class="factor-name">Transaction Frequency</div>
+                  <div class="factor-weight">20% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="frequency">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="frequency"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="frequency"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
+              <div class="factor-description">
+                Regular transaction patterns indicate reliable business
+              </div>
             </div>
 
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Customer Retention</span>
-                <span class="factor-weight">15%</span>
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">👥</div>
+                <div class="factor-info">
+                  <div class="factor-name">Customer Retention</div>
+                  <div class="factor-weight">15% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="retention">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="retention"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="retention"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
+              <div class="factor-description">
+                Repeat customers demonstrate business quality
+              </div>
             </div>
 
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Payment Reliability</span>
-                <span class="factor-weight">15%</span>
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">✅</div>
+                <div class="factor-info">
+                  <div class="factor-name">Payment Reliability</div>
+                  <div class="factor-weight">15% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="reliability">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="reliability"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="reliability"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
+              <div class="factor-description">
+                On-time payments build trust and credibility
+              </div>
             </div>
 
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Business Growth</span>
-                <span class="factor-weight">10%</span>
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">📊</div>
+                <div class="factor-info">
+                  <div class="factor-name">Business Growth</div>
+                  <div class="factor-weight">10% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="growth">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="growth"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="growth"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
+              <div class="factor-description">
+                Revenue growth trends show business potential
+              </div>
             </div>
 
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Payment Diversification</span>
-                <span class="factor-weight">10%</span>
+            <div class="factor-card">
+              <div class="factor-header">
+                <div class="factor-icon">💳</div>
+                <div class="factor-info">
+                  <div class="factor-name">Payment Diversification</div>
+                  <div class="factor-weight">10% of total score</div>
+                </div>
+                <div class="factor-score-display">
+                  <span class="factor-score" data-factor="diversification">--</span>
+                  <span class="factor-score-label">/100</span>
+                </div>
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="diversification"></div>
+              <div class="factor-bar-container">
+                <div class="factor-bar-large">
+                  <div class="factor-fill-large" data-factor="diversification"></div>
+                </div>
               </div>
-              <span class="factor-score">--</span>
-            </div>
-
-            <div class="factor-item">
-              <div class="factor-info">
-                <span class="factor-name">Seasonal Stability</span>
-                <span class="factor-weight">5%</span>
+              <div class="factor-description">
+                Multiple payment methods increase accessibility
               </div>
-              <div class="factor-bar">
-                <div class="factor-fill" data-factor="stability"></div>
-              </div>
-              <span class="factor-score">--</span>
             </div>
           </div>
         </div>
@@ -253,7 +382,7 @@
         <!-- AI Insights -->
         <div class="card">
           <div class="card-header">
-            <h3>AI Credit Insights</h3>
+            <h3>🤖 AI Credit Insights</h3>
             <p>Personalized recommendations to improve your credit score</p>
           </div>
           <div class="insights-list" id="credit-insights">
@@ -261,6 +390,44 @@
               <div class="insight-icon">🤖</div>
               <div class="insight-content">
                 <p>Analyzing your transaction patterns...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Credit Building Tips -->
+        <div class="card">
+          <div class="card-header">
+            <h3>💡 Credit Building Tips</h3>
+            <p>Simple steps to improve your creditworthiness</p>
+          </div>
+          <div class="tips-grid">
+            <div class="tip-item">
+              <div class="tip-icon">📈</div>
+              <div class="tip-content">
+                <h4>Increase Transaction Volume</h4>
+                <p>Process more payments through the platform to show consistent business activity.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">🔄</div>
+              <div class="tip-content">
+                <h4>Maintain Regular Patterns</h4>
+                <p>Keep consistent daily transaction patterns to demonstrate business stability.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">👥</div>
+              <div class="tip-content">
+                <h4>Build Customer Base</h4>
+                <p>Focus on repeat customers to improve your retention metrics.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">💳</div>
+              <div class="tip-content">
+                <h4>Diversify Payment Methods</h4>
+                <p>Accept multiple payment types to show adaptability and reach more customers.</p>
               </div>
             </div>
           </div>
@@ -287,5 +454,62 @@
     <script src="js/blockchain-payments.js"></script>
     <script src="js/voice-commands.js"></script>
     <script src="js/microloans.js"></script>
+
+    <!-- Fallback initialization -->
+    <script>
+      // Ensure CashlessVendor object exists
+      if (typeof CashlessVendor === 'undefined') {
+        window.CashlessVendor = {
+          Storage: {
+            get: function(key) {
+              try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : null;
+              } catch (e) {
+                return null;
+              }
+            },
+            set: function(key, value) {
+              try {
+                localStorage.setItem(key, JSON.stringify(value));
+              } catch (e) {
+                console.error('Storage error:', e);
+              }
+            }
+          },
+          showToast: function(message, type) {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            // Simple toast fallback
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#F44336' : '#2196F3'};
+              color: white;
+              padding: 12px 20px;
+              border-radius: 4px;
+              z-index: 10000;
+              font-size: 14px;
+              max-width: 300px;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+          }
+        };
+      }
+
+      // Set demo vendor data if none exists
+      if (!CashlessVendor.Storage.get('currentVendor')) {
+        CashlessVendor.Storage.set('currentVendor', {
+          id: 'CV-DEMO123',
+          ownerName: 'Maria Santos',
+          businessName: 'Maria\'s Fresh Fruits',
+          phone: '+27 12 345 6789',
+          location: 'Corner of Main St & 5th Ave'
+        });
+      }
+    </script>
   </body>
 </html>

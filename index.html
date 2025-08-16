@@ -13,20 +13,95 @@
       <header class="header">
         <div class="header-content">
           <h1 class="logo">CashlessVendor</h1>
-          <p class="tagline">Empowering street vendors with QR payments</p>
+          <p class="tagline">Empowering South African street vendors with QR payments</p>
         </div>
       </header>
 
       <!-- Main Content -->
       <main class="main-content">
+
+        <!-- Featured Hero Section -->
+        <div class="featured-hero">
+          <div class="hero-container">
+            <div class="hero-content">
+              <div class="hero-badge">
+                <span class="badge-icon">⭐</span>
+                <span class="badge-text">Empowering Street Vendors</span>
+              </div>
+
+              <h1 class="hero-title">
+                Accept Payments<br>
+                with Just a <span class="highlight-text">QR Code</span>
+              </h1>
+
+              <p class="hero-description">
+                No POS machines needed. Get your unique QR code, start accepting digital payments, and track your income - all from your mobile phone.
+              </p>
+
+              <!-- Hero Action Buttons -->
+              <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" onclick="scrollToAuth()">
+                  📱 Get My QR Code
+                </button>
+                <button class="btn btn-outline btn-lg" onclick="showDemo()">
+                  📞 Try USSD: *123#
+                </button>
+              </div>
+
+              <!-- Trust Indicators -->
+              <div class="trust-indicators">
+                <div class="trust-item">
+                  <span class="trust-number">8,500+</span>
+                  <span class="trust-label">Active Vendors</span>
+                </div>
+                <div class="trust-item">
+                  <span class="trust-number">R4.2M+</span>
+                  <span class="trust-label">Monthly Volume</span>
+                </div>
+                <div class="trust-item">
+                  <span class="trust-number">99.9%</span>
+                  <span class="trust-label">Uptime</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-image">
+              <div class="vendor-showcase">
+                <img src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                     alt="South African vendor with QR code"
+                     class="vendor-photo" />
+                <div class="qr-overlay">
+                  <div class="qr-code-display">
+                    <div class="qr-pattern"></div>
+                    <span class="qr-label">PayID</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Auth Section Header -->
+        <div class="auth-section-header">
+          <h2>Join CashlessVendor Today</h2>
+          <p>Choose your path to digital payments success</p>
+        </div>
+
         <!-- Auth Toggle -->
         <div class="auth-toggle-container">
           <div class="auth-toggle">
             <button class="toggle-btn active" id="register-toggle">
-              New Vendor
+              <span class="toggle-icon">👤</span>
+              <span class="toggle-text">
+                <strong>New Vendor</strong>
+                <small>Create your account</small>
+              </span>
             </button>
             <button class="toggle-btn" id="login-toggle">
-              Existing Vendor
+              <span class="toggle-icon">🔑</span>
+              <span class="toggle-text">
+                <strong>Existing Vendor</strong>
+                <small>Sign in to your account</small>
+              </span>
             </button>
           </div>
         </div>
@@ -156,6 +231,8 @@
                 <div class="form-step" data-step="3">
                   <h3>Verification</h3>
 
+
+
                   <div class="verification-info">
                     <div class="info-card">
                       <h4>📱 SMS Verification</h4>
@@ -218,6 +295,94 @@
             </div>
           </div>
         </div>
+
+        <!-- Login Container -->
+        <div class="login-container" id="login-container" style="display: none">
+          <div class="card">
+            <div class="card-header">
+              <h2>Vendor Login</h2>
+              <p class="step-indicator">
+                Welcome back! Please sign in to your account
+              </p>
+            </div>
+
+            <div class="card-content">
+              <form id="login-form" class="form">
+                <div class="form-group">
+                  <label for="login-email">Email Address</label>
+                  <input
+                    type="email"
+                    id="login-email"
+                    name="email"
+                    placeholder="your.email@example.com"
+                    required
+                  />
+                  <div class="error-message" id="login-email-error"></div>
+                </div>
+
+                <div class="form-group">
+                  <label for="login-password">Password</label>
+                  <input
+                    type="password"
+                    id="login-password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <div class="error-message" id="login-password-error"></div>
+                  <div class="form-help">
+                    <small>Default password for demo accounts: <strong>password123</strong></small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="remember-me" name="rememberMe" />
+                    <span class="checkmark"></span>
+                    Remember me
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg">
+                  Sign In
+                </button>
+
+                <div class="login-links">
+                  <a href="#" class="link" id="forgot-password">
+                    Forgot your password?
+                  </a>
+                </div>
+
+                <!-- Demo Login Options -->
+                <div class="demo-login-section">
+                  <div class="divider">
+                    <span>Or try demo accounts</span>
+                  </div>
+                  <div class="demo-accounts">
+                    <button type="button" class="btn-demo" onclick="loginDemo('maria')">
+                      👩‍🦱 Maria's Fresh Fruits
+                    </button>
+                    <button type="button" class="btn-demo" onclick="loginDemo('john')">
+                      👨‍🍳 John's Street Food
+                    </button>
+                    <button type="button" class="btn-demo" onclick="loginDemo('sarah')">
+                      👩‍🎨 Sarah's Crafts
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Feature Section -->
+        <div class="bottom-feature">
+          <div class="feature-content">
+            <h3>Ready to Transform Your Business?</h3>
+            <p>Join the digital payment revolution and watch your business grow!</p>
+          </div>
+        </div>
+
       </main>
 
       <!-- Success Modal -->
@@ -238,57 +403,6 @@
             </button>
           </div>
         </div>
-
-        <!-- Login Container -->
-        <div class="login-container" id="login-container" style="display: none">
-          <div class="card">
-            <div class="card-header">
-              <h2>Vendor Login</h2>
-              <p class="step-indicator">
-                Welcome back! Please sign in to your account
-              </p>
-            </div>
-
-            <div class="card-content">
-              <form id="login-form" class="form">
-                <div class="form-group">
-                  <label for="login-email">Email Address</label>
-                  <input type="email" id="login-email" name="email" required />
-                  <div class="error-message" id="login-email-error"></div>
-                </div>
-
-                <div class="form-group">
-                  <label for="login-password">Password</label>
-                  <input
-                    type="password"
-                    id="login-password"
-                    name="password"
-                    required
-                  />
-                  <div class="error-message" id="login-password-error"></div>
-                </div>
-
-                <div class="form-group">
-                  <label class="checkbox-label">
-                    <input type="checkbox" id="remember-me" name="rememberMe" />
-                    <span class="checkmark"></span>
-                    Remember me
-                  </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-lg">
-                  Sign In
-                </button>
-
-                <div class="login-links">
-                  <a href="#" class="link" id="forgot-password"
-                    >Forgot your password?</a
-                  >
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -296,5 +410,27 @@
     <script src="js/form-validation.js"></script>
     <script src="js/registration.js"></script>
     <script src="js/login.js"></script>
+
+    <!-- Initialize Authentication System -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the login system
+        if (typeof VendorLogin !== 'undefined') {
+          window.vendorLogin = new VendorLogin();
+        }
+
+        // Initialize registration system
+        if (typeof VendorRegistration !== 'undefined') {
+          window.vendorRegistration = new VendorRegistration();
+        }
+
+        // Check for auto-login after a short delay
+        setTimeout(() => {
+          if (typeof CashlessVendor !== 'undefined' && CashlessVendor.checkAutoLogin) {
+            CashlessVendor.checkAutoLogin();
+          }
+        }, 500);
+      });
+    </script>
   </body>
 </html>

@@ -10,29 +10,97 @@ class MicroloansManager {
     }
     
     async init() {
-        // Initialize credit scoring system
-        this.creditScoring = new AICreditScoring();
-        
-        // Get current vendor
-        const vendor = CashlessVendor.Storage.get('currentVendor');
-        this.vendorId = vendor ? vendor.id : 'demo_vendor';
-        
-        // Load and display credit assessment
-        await this.loadCreditAssessment();
-        
-        // Setup event listeners
-        this.setupEventListeners();
-        
-        // Load existing loans
-        this.loadExistingLoans();
+        try {
+            // Show loading state
+            this.showLoadingState();
+
+            // Initialize credit scoring system
+            this.creditScoring = new AICreditScoring();
+
+            // Get current vendor
+            const vendor = CashlessVendor.Storage.get('currentVendor');
+            this.vendorId = vendor ? vendor.id : 'demo_vendor';
+
+            // Update vendor info in sidebar
+            this.updateVendorInfo(vendor);
+
+            // Load and display credit assessment
+            await this.loadCreditAssessment();
+
+            // Setup event listeners
+            this.setupEventListeners();
+
+            // Load existing loans
+            this.loadExistingLoans();
+
+        } catch (error) {
+            console.error('Error initializing microloans page:', error);
+            this.showErrorState('Failed to load microloans page. Please refresh and try again.');
+        }
+    }
+
+    showLoadingState() {
+        // Show loading skeletons
+        document.getElementById('credit-score').innerHTML = '<div class="loading-skeleton score-loading"></div>';
+        document.getElementById('credit-tier').textContent = 'Loading...';
+        document.getElementById('score-description').textContent = 'Analyzing your transaction history...';
+        document.getElementById('eligibility-status').textContent = 'Checking...';
+        document.getElementById('max-loan-amount').textContent = 'R--,---';
+
+        // Show loading for credit factors
+        const factorFills = document.querySelectorAll('.factor-fill');
+        factorFills.forEach(fill => {
+            fill.className = 'factor-fill loading-skeleton factor-loading';
+            fill.style.width = '100%';
+        });
+    }
+
+    showErrorState(message) {
+        const mainContent = document.querySelector('.dashboard-main');
+        if (mainContent) {
+            mainContent.innerHTML = `
+                <div class="card error-state">
+                    <div class="card-content" style="text-align: center; padding: 3rem;">
+                        <h3>⚠️ Error Loading Microloans</h3>
+                        <p>${message}</p>
+                        <button class="btn-primary" onclick="window.location.reload()">
+                            🔄 Retry
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    updateVendorInfo(vendor) {
+        if (vendor) {
+            const vendorName = document.getElementById('vendor-name');
+            const vendorId = document.getElementById('vendor-id-display');
+            const vendorInitials = document.getElementById('vendor-initials');
+
+            if (vendorName) vendorName.textContent = vendor.ownerName || 'Demo Vendor';
+            if (vendorId) vendorId.textContent = vendor.id || 'CV-DEMO123';
+            if (vendorInitials) {
+                const initials = (vendor.ownerName || 'DV').split(' ').map(n => n[0]).join('').toUpperCase();
+                vendorInitials.textContent = initials;
+            }
+        }
     }
     
     async loadCreditAssessment() {
         try {
-            CashlessVendor.showToast('🤖 AI analyzing your transaction history...', 'info');
+            if (typeof CashlessVendor !== 'undefined' && CashlessVendor.showToast) {
+                CashlessVendor.showToast('🤖 AI analyzing your transaction history...', 'info');
+            }
 
-            // Calculate credit score
-            this.currentAssessment = await this.creditScoring.calculateCreditScore(this.vendorId);
+            // Check if credit scoring system is available
+            if (!this.creditScoring || typeof this.creditScoring.calculateCreditScore !== 'function') {
+                // Fallback to demo data
+                this.currentAssessment = this.generateDemoAssessment();
+            } else {
+                // Calculate credit score
+                this.currentAssessment = await this.creditScoring.calculateCreditScore(this.vendorId);
+            }
 
             // Record monitoring metrics
             if (window.systemMonitoring) {
@@ -49,15 +117,67 @@ class MicroloansManager {
             this.displayLoanEligibility();
             this.displayCreditInsights();
 
-            CashlessVendor.showToast('✅ Credit assessment complete!', 'success');
+            if (typeof CashlessVendor !== 'undefined' && CashlessVendor.showToast) {
+                CashlessVendor.showToast('✅ Credit assessment complete!', 'success');
+            }
 
         } catch (error) {
             console.error('Error loading credit assessment:', error);
             if (window.systemMonitoring) {
                 window.systemMonitoring.recordError('Credit Assessment', error.message, this.vendorId);
             }
-            CashlessVendor.showToast('❌ Error analyzing credit profile', 'error');
+
+            // Fallback to demo data on error
+            this.currentAssessment = this.generateDemoAssessment();
+            this.displayCreditScore();
+            this.displayCreditFactors();
+            this.displayLoanEligibility();
+            this.displayCreditInsights();
+
+            if (typeof CashlessVendor !== 'undefined' && CashlessVendor.showToast) {
+                CashlessVendor.showToast('⚠️ Using demo data - credit system unavailable', 'warning');
+            }
         }
+    }
+
+    generateDemoAssessment() {
+        // Generate realistic demo assessment data
+        const baseScore = 0.65 + (Math.random() * 0.25); // Score between 65-90
+        const tier = baseScore >= 0.8 ? 'excellent' :
+                    baseScore >= 0.65 ? 'good' :
+                    baseScore >= 0.5 ? 'fair' : 'poor';
+
+        return {
+            score: baseScore,
+            tier: tier,
+            confidence: 0.85 + (Math.random() * 0.1),
+            factors: {
+                volume: 0.7 + (Math.random() * 0.25),
+                frequency: 0.6 + (Math.random() * 0.3),
+                retention: 0.8 + (Math.random() * 0.15),
+                reliability: 0.75 + (Math.random() * 0.2),
+                growth: 0.65 + (Math.random() * 0.25),
+                diversification: 0.55 + (Math.random() * 0.3),
+                stability: 0.7 + (Math.random() * 0.2)
+            },
+            loanTerms: {
+                maxLoan: tier === 'excellent' ? 50000 :
+                        tier === 'good' ? 25000 :
+                        tier === 'fair' ? 10000 : 5000,
+                interestRate: tier === 'excellent' ? 0.08 :
+                             tier === 'good' ? 0.12 :
+                             tier === 'fair' ? 0.18 : 0.25,
+                termMonths: tier === 'excellent' ? 24 :
+                           tier === 'good' ? 18 :
+                           tier === 'fair' ? 12 : 6
+            },
+            insights: [
+                "Your transaction volume shows consistent growth over the past 6 months.",
+                "Consider diversifying payment methods to improve your credit score.",
+                "Your customer retention rate is above average for street vendors.",
+                "Regular transaction patterns indicate stable business operations."
+            ]
+        };
     }
     
     displayCreditScore() {
@@ -98,37 +218,43 @@ class MicroloansManager {
     
     displayCreditFactors() {
         if (!this.currentAssessment || !this.currentAssessment.factors) return;
-        
+
         const factors = this.currentAssessment.factors;
-        
+
         Object.entries(factors).forEach(([factorName, score]) => {
             const factorFill = document.querySelector(`[data-factor="${factorName}"]`);
-            const factorScore = factorFill?.parentElement.parentElement.querySelector('.factor-score');
-            
+            const factorScore = document.querySelector(`.factor-score[data-factor="${factorName}"]`);
+
             if (factorFill && factorScore) {
                 const percentage = Math.round(score * 100);
-                factorFill.style.width = percentage + '%';
+
+                // Animate the fill
+                setTimeout(() => {
+                    factorFill.style.width = percentage + '%';
+                }, Math.random() * 500);
+
                 factorScore.textContent = percentage;
-                
+
                 // Color coding based on score
-                if (score >= 0.8) factorFill.className = 'factor-fill excellent';
-                else if (score >= 0.6) factorFill.className = 'factor-fill good';
-                else if (score >= 0.4) factorFill.className = 'factor-fill fair';
-                else factorFill.className = 'factor-fill poor';
+                if (score >= 0.8) factorFill.className = 'factor-fill-large excellent';
+                else if (score >= 0.6) factorFill.className = 'factor-fill-large good';
+                else if (score >= 0.4) factorFill.className = 'factor-fill-large fair';
+                else factorFill.className = 'factor-fill-large poor';
             }
         });
     }
     
     displayLoanEligibility() {
         if (!this.currentAssessment || !this.currentAssessment.loanTerms) return;
-        
+
         const terms = this.currentAssessment.loanTerms;
         const statusElement = document.getElementById('eligibility-status');
         const maxAmountElement = document.getElementById('max-loan-amount');
         const interestRateElement = document.getElementById('interest-rate');
         const maxTermElement = document.getElementById('max-term');
+        const estimatedPaymentElement = document.getElementById('estimated-payment');
         const maxAmountHelpElement = document.getElementById('max-amount-help');
-        
+
         // Update eligibility status
         if (terms.maxLoan > 0) {
             statusElement.textContent = 'Eligible';
@@ -137,20 +263,29 @@ class MicroloansManager {
             statusElement.textContent = 'Not Eligible';
             statusElement.className = 'eligibility-status not-eligible';
         }
-        
+
+        // Calculate estimated monthly payment for max loan
+        const estimatedPayment = terms.maxLoan > 0 ?
+            this.calculateMonthlyPayment(terms.maxLoan, terms.interestRate, terms.termMonths) : 0;
+
         // Update loan terms
         maxAmountElement.textContent = `R${terms.maxLoan.toLocaleString()}`;
         interestRateElement.textContent = `${(terms.interestRate * 100).toFixed(1)}%`;
         maxTermElement.textContent = `${terms.termMonths} months`;
-        maxAmountHelpElement.textContent = `R${terms.maxLoan.toLocaleString()}`;
-        
+        if (estimatedPaymentElement) {
+            estimatedPaymentElement.textContent = `R${estimatedPayment.toLocaleString()}`;
+        }
+        if (maxAmountHelpElement) {
+            maxAmountHelpElement.textContent = `R${terms.maxLoan.toLocaleString()}`;
+        }
+
         // Update form constraints
         const loanAmountInput = document.getElementById('loan-amount');
         if (loanAmountInput) {
             loanAmountInput.max = terms.maxLoan;
             loanAmountInput.disabled = terms.maxLoan === 0;
         }
-        
+
         // Enable/disable apply button
         const applyBtn = document.getElementById('apply-btn');
         if (applyBtn) {
@@ -397,4 +532,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Export for global use
 window.MicroloansManager = MicroloansManager;
-}
