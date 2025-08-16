@@ -130,7 +130,8 @@ pytest
 ✅ Add offline-mode transaction queuing
 
 🤝 Acknowledgements
-This project was built for the BET Hackathon under the theme “Innovate the Future of Payments”. We believe financial inclusion is a human right, and CashlessVendor is our step toward a fairer, digital economy for all.
+This project was built for the BET Hackathon under the theme “Innovate the Future of Payments”. We believe financial inclusion is a human right,
+and CashlessVendor is our step toward a fairer, digital economy for all.
 
 📬 Contact
 Project Lead: Kutloano Molapisi
